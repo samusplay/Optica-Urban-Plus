@@ -55,10 +55,10 @@ CREATE TABLE prescriptions (
 -- =======================
 -- ORDERS
 -- =======================
+-- CAMBIO: Se eliminó prescription_id de esta tabla
 CREATE TABLE orders (
   order_id         BIGINT NOT NULL AUTO_INCREMENT,
   user_id          BIGINT NOT NULL,
-  prescription_id  BIGINT NULL,
   total            DECIMAL(10,2)   NOT NULL,
   estado           ENUM('PENDIENTE','PAGADO','ENVIADO','CANCELADO') NOT NULL,
   payment_method   ENUM('MERCADO_PAGO','PAYU') NOT NULL,
@@ -69,32 +69,37 @@ CREATE TABLE orders (
   CONSTRAINT fk_orders_user
     FOREIGN KEY (user_id) REFERENCES users(user_id)
     ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-  CONSTRAINT fk_orders_prescription
-    FOREIGN KEY (prescription_id) REFERENCES prescriptions(prescription_id)
-    ON DELETE SET NULL
     ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 -- =======================
 -- ORDER_ITEMS
 -- =======================
+-- CAMBIO: Se agregó prescription_id aquí
 CREATE TABLE order_items (
   order_item_id   BIGINT NOT NULL AUTO_INCREMENT,
   order_id        BIGINT NOT NULL,
   product_id      BIGINT NOT NULL,
+  prescription_id BIGINT NULL,  -- Puede ser NULL (ej: gafas de sol o lentes de color sin aumento)
   cantidad        INT             NOT NULL,
   precio_unitario DECIMAL(10,2)   NOT NULL,
   sub_total       DECIMAL(10,2)   AS (cantidad * precio_unitario) STORED,
 
   PRIMARY KEY (order_item_id),
   UNIQUE KEY uk_order_items_order_product (order_id, product_id),
+
   CONSTRAINT fk_order_items_order
     FOREIGN KEY (order_id) REFERENCES orders(order_id)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
+
   CONSTRAINT fk_order_items_product
     FOREIGN KEY (product_id) REFERENCES products(product_id)
     ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+
+  CONSTRAINT fk_order_items_prescription
+    FOREIGN KEY (prescription_id) REFERENCES prescriptions(prescription_id)
+    ON DELETE SET NULL
     ON UPDATE CASCADE
 ) ENGINE=InnoDB;
