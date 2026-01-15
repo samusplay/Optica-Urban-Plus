@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -27,7 +26,7 @@ public class User {
     private String nombre;
 
     @Column(nullable = false, unique = true)
-    private String emaiL;
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -40,8 +39,10 @@ public class User {
     @Column(nullable = false)
     private Role rol;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+    @Column(name = "created_at", updatable = false)
+    @org.hibernate.annotations.CreationTimestamp
     private LocalDateTime createdAt;
+
 
 
 }
