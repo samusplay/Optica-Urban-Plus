@@ -1,6 +1,7 @@
 package com.opticaApp.backend.service.impl;
 
 import com.opticaApp.backend.entity.User;
+import com.opticaApp.backend.exceptions.ConflictException;
 import com.opticaApp.backend.models.AuthResponseDTO;
 import com.opticaApp.backend.models.LoginRequestDTO;
 import com.opticaApp.backend.models.RegisterRequestDTO;
@@ -31,8 +32,9 @@ public class AuthServiceImpl implements AuthService {
             throw  new RuntimeException("El correo electronico ya está registrado");
         }
         //validamos el numero de telefono
-        if (request.getTelefono() != null && userservice.existsByTelefono(request.getTelefono())) {
-            throw new RuntimeException("El teléfono ya está registrado por otro usuario");
+        if (request.getTelefono() != null && !request.getTelefono().isBlank()
+                && userservice.existsByTelefono(request.getTelefono())) {
+            throw new ConflictException("El teléfono ya está registrado por otro usuario");
         }
         //Construimos la identidad apartir del dto
         User user=User.builder()

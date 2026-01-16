@@ -2,6 +2,8 @@ package com.opticaApp.backend.service.impl;
 
 import com.opticaApp.backend.entity.Prescription;
 import com.opticaApp.backend.entity.User;
+import com.opticaApp.backend.exceptions.BadRequestException;
+import com.opticaApp.backend.exceptions.NotFoundException;
 import com.opticaApp.backend.models.PrescriptionUploadDTO;
 import com.opticaApp.backend.repository.PrescriptionRepository;
 import com.opticaApp.backend.repository.UserRepository;
@@ -37,18 +39,18 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     public Prescription uploadPrescription(PrescriptionUploadDTO dto) {
         //Validar si el usuario mando un archivo
         if(dto.getFile()==null||dto.getFile().isEmpty()){
-            throw  new RuntimeException("Error:No se ha selecionado ningun archivo para subir ");
+            throw  new BadRequestException("Error:No se ha selecionado ningun archivo para subir ");
         }
         //Validar el formato pdf o word
 
         String contentType=dto.getFile().getContentType();
         if(!isValidPrescriptionFormat(contentType)){
-            throw  new RuntimeException("Error:Formato no validado.Solo se permiten archivos PDF o Word");
+            throw  new BadRequestException("Error:Formato no validado.Solo se permiten archivos PDF o Word");
         }
 
         //1validar  que exista un usuario y obtener Id
         User user=userRepository.findById(dto.getUserId())
-                .orElseThrow(()->new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(()->new NotFoundException("Usuario no encontrado"));
 
         //2.crear sub carpeta con el nombre del usuario
         //Limpiamos el nombre
