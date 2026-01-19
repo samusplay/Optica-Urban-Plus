@@ -28,7 +28,7 @@ public class RegisterRequestDTO {
 
     @NotBlank(message = "El teléfono es obligatorio") // Opcional: quítalo si no es obligatorio
     @Size(max = 20, message = "El teléfono no puede exceder los 20 caracteres")
-    @Pattern(regexp = "^[0-9+ -]*$", message = "El teléfono solo puede contener números, espacios, guiones o el signo +")
+    @Pattern(regexp = "^\\+\\d{7,15}$", message = "El teléfono debe tener formato internacional (Ej: +573001234567)")
     private String telefono;
 
 
