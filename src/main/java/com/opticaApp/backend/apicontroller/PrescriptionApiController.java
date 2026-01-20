@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,13 +18,11 @@ public class PrescriptionApiController implements PrescriptionApi {
     //inyectamos el servicio
     private final PrescriptionService prescriptionService;
     @Override
-    public ResponseEntity<Prescription> uploadPrescription(PrescriptionUploadDTO uploadDTO) {
-        log.info("Controlador:Recibiendo solicitud de subida para User ID:{}",uploadDTO.getUserId());
+    public ResponseEntity<Prescription> uploadPrescription(@ModelAttribute PrescriptionUploadDTO dto) {
 
-        //llamamos al servicio
-        Prescription newPrescription=prescriptionService.uploadPrescription(uploadDTO);
+        // Aquí llamamos a tu servicio que ya vi y está perfecto
+        Prescription savedPrescription = prescriptionService.uploadPrescription(dto);
 
-        //Devolvemos una respuesta 201
-        return ResponseEntity.status(HttpStatus.CREATED).body(newPrescription);
+        return ResponseEntity.ok(savedPrescription);
     }
 }

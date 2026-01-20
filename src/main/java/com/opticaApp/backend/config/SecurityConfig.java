@@ -9,29 +9,58 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                // 1. CONEXIÓN DE CORS: Agregamos esta línea para que use el Bean de abajo
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         //Publicos
                         .requestMatchers("/auth/register", "/auth/login").permitAll()
-                        //Privados
                         .requestMatchers("/products/**").permitAll()
-
+                        //Privados
                         .requestMatchers("/prescriptions/**").authenticated()
 
-                        //Todos lo endpoint restantes
+                        //Todos los endpoint restantes
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // Aceptamos peticiones desde Angular
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+
+        // Aceptamos todos los verbos HTTP (OPTIONS es vital para subir archivos)
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // Aceptamos las cabeceras clave incluyendo 'Accept' por seguridad
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
+
+        // Permitimos credenciales
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

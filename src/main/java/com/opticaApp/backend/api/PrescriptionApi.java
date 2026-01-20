@@ -11,7 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/prescriptions")
 public interface PrescriptionApi {
 
-    //Formdata
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<Prescription>uploadPrescription(@ModelAttribute PrescriptionUploadDTO uploadDTO);
+    @PostMapping(
+            value = "/upload",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE // <--- ESTO ES OBLIGATORIO
+    )
+    ResponseEntity<Prescription> uploadPrescription(
+            // Usamos @ModelAttribute porque NO es un JSON, es un Formulario con Archivo
+            @ModelAttribute PrescriptionUploadDTO dto
+    );
 }

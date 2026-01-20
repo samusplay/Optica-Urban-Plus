@@ -77,6 +77,7 @@ public class AuthServiceImpl implements AuthService {
         //Retornamos la respuesta
         return AuthResponseDTO.builder()
                 .token(token)
+                .id(user.getId())
                 .nombre(user.getNombre())
                 .role(user.getRol().name())
                 .build();
