@@ -39,4 +39,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ApiError.of(409, "CONFLICT", ex.getMessage(), req.getRequestURI()));
     }
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiError> handleMaxUploadSize(Exception ex, HttpServletRequest req) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiError.of(400, "FILE_TOO_LARGE", "La imagen es demasiado pesada. Máximo 10MB.", req.getRequestURI()));
+    }
 }
