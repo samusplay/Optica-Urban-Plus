@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -38,6 +40,15 @@ public class User {
     @Enumerated(EnumType.STRING) // Importante para que guarde "CLIENTE" y no "0"
     @Column(nullable = false)
     private Role rol;
+
+    //agregar Photo_url
+
+    @Column(name = "photo_url")
+    private String photo_url;
+
+    //relacion biderecional traemos el objeto
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Order> orders;
 
     @Column(name = "created_at", updatable = false)
     @org.hibernate.annotations.CreationTimestamp
