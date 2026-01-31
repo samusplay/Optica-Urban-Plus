@@ -46,6 +46,9 @@ public class User {
     @Column(name = "photo_url")
     private String photo_url;
 
+    @Column(name = "direccion")
+    private String direccion;
+
     //relacion biderecional traemos el objeto
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Order> orders;

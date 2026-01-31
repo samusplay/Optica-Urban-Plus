@@ -35,6 +35,9 @@ public class SecurityConfig {
                         .requestMatchers("/products/**").permitAll()
                         //Privados
                         .requestMatchers("/prescriptions/**").authenticated()
+                        .requestMatchers("/photo/**").authenticated()
+                        .requestMatchers("/order/**").authenticated()
+                        .requestMatchers("/user/**").authenticated()
 
                         //Todos los endpoint restantes
                         .anyRequest().authenticated()
