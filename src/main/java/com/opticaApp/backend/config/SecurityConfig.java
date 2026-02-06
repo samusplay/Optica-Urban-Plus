@@ -4,6 +4,7 @@ import com.opticaApp.backend.security.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -30,6 +31,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+
                         //Publicos
                         .requestMatchers("/auth/register", "/auth/login").permitAll()
                         .requestMatchers("/products/**").permitAll()
@@ -54,10 +56,10 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
 
         // Aceptamos todos los verbos HTTP (OPTIONS es vital para subir archivos)
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT","PATCH", "DELETE", "OPTIONS"));
 
         // Aceptamos las cabeceras clave incluyendo 'Accept' por seguridad
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "X-Requested-With"));
 
         // Permitimos credenciales
         configuration.setAllowCredentials(true);
