@@ -51,6 +51,10 @@ public class Order {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    //relacion  bidireccional
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<OrderItem> items = new java.util.ArrayList<>();
+
     // Lógica para las fechas automáticas
     @PrePersist
     protected void onCreate() {

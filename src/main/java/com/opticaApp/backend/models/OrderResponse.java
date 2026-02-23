@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -19,4 +20,6 @@ public class OrderResponse {
     private OrderStatus estado;
     private String shippingAddress;
     private LocalDateTime fecha;
+    //detalles productos
+    private List<OrderItemResponse> items;
 }
