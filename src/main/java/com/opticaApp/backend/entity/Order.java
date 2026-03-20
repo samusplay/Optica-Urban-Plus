@@ -1,5 +1,6 @@
 package com.opticaApp.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.opticaApp.backend.models.OrderStatus;
 import com.opticaApp.backend.models.PaymentMethod;
 import jakarta.persistence.*;
@@ -27,6 +28,7 @@ public class Order {
     //relacion con el usuario
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @Column(name = "total", nullable = false)
