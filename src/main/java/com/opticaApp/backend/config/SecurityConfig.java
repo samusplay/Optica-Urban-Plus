@@ -52,8 +52,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Aceptamos peticiones desde Angular
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        // Aceptamos peticiones desde Angular y vercel
+        configuration.setAllowedOriginPatterns(List.of("*"));
 
         // Aceptamos todos los verbos HTTP (OPTIONS es vital para subir archivos)
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT","PATCH", "DELETE", "OPTIONS"));
