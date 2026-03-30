@@ -53,7 +53,10 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // Aceptamos peticiones desde Angular y vercel
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedOrigins(List.of(
+                "https://urban-optica-frontend.vercel.app",
+                "http://localhost:4200"
+        ));
 
         // Aceptamos todos los verbos HTTP (OPTIONS es vital para subir archivos)
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT","PATCH", "DELETE", "OPTIONS"));
